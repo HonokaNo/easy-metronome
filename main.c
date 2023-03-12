@@ -12,10 +12,10 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam){
 
   switch(Msg){
     case WM_CREATE:
-      mciSendString("Open click.mp3 alias click", "", 0, 0);
-      SetTimer(hWnd, 1, 1000 * 60 / bpm, NULL);
       s_hbrBlue = CreateSolidBrush(RGB(0x00, 0x00, 0xff));
       s_hbrRed = CreateSolidBrush(RGB(0xff, 0x00, 0x00));
+      mciSendString("Open click.mp3 alias click", "", 0, 0);
+      SetTimer(hWnd, 1, 1000 * 60 / bpm, NULL);
       return 0;
     case WM_DESTROY:
       KillTimer(hWnd, 1);
@@ -68,7 +68,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   wndClass.cbClsExtra = wndClass.cbWndExtra = 0;
   wndClass.hInstance = hInstance;
   wndClass.hIcon = NULL;
-  wndClass.hCursor = NULL;
+  wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
   wndClass.hbrBackground = CreateSolidBrush(RGB(0xff, 0x00, 0x00));
   wndClass.lpszMenuName = NULL;
   wndClass.lpszClassName = TEXT("METRONOME");
