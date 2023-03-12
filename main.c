@@ -79,6 +79,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   hWnd = CreateWindow(TEXT("METRONOME"), TEXT("Metronome"), style, CW_USEDEFAULT, CW_USEDEFAULT, 300, 100, NULL, NULL, hInstance, NULL);
   if(!hWnd) return -1;
 
+  UpdateWindow(hWnd);
+
   MSG msg;
   while(GetMessage(&msg, NULL, 0, 0)){
     TranslateMessage(&msg);
