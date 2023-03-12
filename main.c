@@ -67,7 +67,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   wndClass.lpfnWndProc = WinProc;
   wndClass.cbClsExtra = wndClass.cbWndExtra = 0;
   wndClass.hInstance = hInstance;
-  wndClass.hIcon = NULL;
+  wndClass.hIcon = LoadIcon(NULL, IDI_INFORMATION);
   wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
   wndClass.hbrBackground = CreateSolidBrush(RGB(0xff, 0x00, 0x00));
   wndClass.lpszMenuName = NULL;
