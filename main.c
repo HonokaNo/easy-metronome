@@ -36,6 +36,8 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam){
     case WM_PAINT:
     {
       RECT rc;
+      CHAR buf[64];
+      wsprintfA(buf, "bpm: %u", bpm);
       GetClientRect(hWnd, &rc);
       hdc = BeginPaint(hWnd, &ps);
       if(play){
@@ -45,6 +47,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam){
         FillRect(hdc, &rc, s_hbrRed);
         DrawTextA(hdc, "Please click me to start...", -1, &rc, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
       }
+      DrawTextA(hdc, buf, -1, &rc, DT_SINGLELINE | DT_CENTER | DT_BOTTOM);
       EndPaint(hWnd, &ps);
       return 0;
     }
