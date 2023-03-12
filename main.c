@@ -8,7 +8,6 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam){
   PAINTSTRUCT ps;
   HDC hdc;
   static HBRUSH s_hbrRed = NULL, s_hbrBlue = NULL;
-  HGDIOBJ hbrOld;
 
   switch(Msg){
     case WM_CREATE:
@@ -40,15 +39,12 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam){
       GetClientRect(hWnd, &rc);
       hdc = BeginPaint(hWnd, &ps);
       if(play){
-        hbrOld = SelectObject(hdc, s_hbrBlue);
-        Rectangle(hdc, 0, 0, rc.right, rc.bottom);
+        FillRect(hdc, &rc, s_hbrBlue);
         DrawTextA(hdc, "Playing...", -1, &rc, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
       }else{
-        hbrOld = SelectObject(hdc, s_hbrRed);
-        Rectangle(hdc, 0, 0, rc.right, rc.bottom);
+        FillRect(hdc, &rc, s_hbrRed);
         DrawTextA(hdc, "Please click me to start...", -1, &rc, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
       }
-      SelectObject(hdc, hbrOld);
       EndPaint(hWnd, &ps);
       return 0;
     }
