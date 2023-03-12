@@ -18,7 +18,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam){
       s_hbrRed = CreateSolidBrush(RGB(0xff, 0x00, 0x00));
       return 0;
     case WM_DESTROY:
-      KillTimer(hWNd, 1);
+      KillTimer(hWnd, 1);
       mciSendString("Stop click", "", 0, 0);
       mciSendString("Close All", "", 0, 0);
       DeleteObject(s_hbrBlue);
