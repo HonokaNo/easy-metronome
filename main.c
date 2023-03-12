@@ -32,7 +32,6 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam){
     case WM_TIMER:
       if(play){
         mciSendString("Play click from 0", "", 0, 0);
-        SetTimer(hWnd, 1, 1000 * 60 / bpm, NULL);
       }
       return 0;
     case WM_PAINT:
