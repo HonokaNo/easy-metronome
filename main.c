@@ -89,5 +89,5 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
   DeleteObject(wndClass.hbrBackground);
 
-  return msg.wParam;
+  return (INT)msg.wParam;
 }
