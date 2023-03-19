@@ -1,5 +1,30 @@
 #include <windows.h>
+#include <stdlib.h>
 #include <stdio.h>
+#include <strsafe.h> /* for StringC... functions */
+
+#if !defined(NDEBUG) && defined(_MSC_VER)
+  // for detecting memory leak (MSVC only)
+  #define _CRTDBG_MAP_ALLOC
+  #include <crtdbg.h>
+#endif
+
+#ifndef NDEBUG
+  /* Debug output */
+  void DebugPrintf(const char *fmt, ...)
+  {
+    va_list va;
+    char buf[1024];
+    va_start(va, fmt);
+    StringCchVPrintfA(buf, _countof(buf), fmt, va);
+    OutputDebugStringA(buf);
+    va_end(va);
+  }
+  /* You can use DPRINT macro like printf() syntax */
+  #define DPRINT(fmt, ...) DebugPrintf("%s (%d): " fmt, __FILE__, __LINE__, ## __VA_ARGS__)
+#else
+  #define DPRINT(fmt, ...) /* empty */
+#endif
 
 static int bpm;
 
@@ -37,7 +62,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam){
     {
       RECT rc;
       CHAR buf[64];
-      wsprintfA(buf, "bpm: %u", bpm);
+      StringCchPrintfA(buf, _countof(buf), "bpm: %u", bpm);
       GetClientRect(hWnd, &rc);
       hdc = BeginPaint(hWnd, &ps);
       if(play){
@@ -62,8 +87,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   static TCHAR strText[MAX_PATH], strPath[MAX_PATH];
   DWORD style;
 
+#if !defined(NDEBUG) && defined(_MSC_VER)
+  /* Report any memory leaks on exit (MSVC only) */
+  _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
+  DPRINT("hInstance: %p\n", hInstance);
+
   GetCurrentDirectory(MAX_PATH, strText);
-  wsprintf(strPath, TEXT("%s\\%s"), strText, TEXT("settings.ini"));
+  StringCchPrintf(strPath, _countof(strPath), TEXT("%s\\%s"), strText, TEXT("settings.ini"));
 
   bpm = GetPrivateProfileInt(TEXT("General"), TEXT("BPM"), 120, strPath);
   if (bpm <= 0)
@@ -94,6 +126,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   }
 
   DeleteObject(wndClass.hbrBackground);
+
+  /* Check handle leaks */
+  DPRINT("GDI objects: %ld\n", GetGuiResources(GetCurrentProcess(), GR_GDIOBJECTS));
+  DPRINT("USER objects: %ld\n", GetGuiResources(GetCurrentProcess(), GR_USEROBJECTS));
 
   return (INT)msg.wParam;
 }
