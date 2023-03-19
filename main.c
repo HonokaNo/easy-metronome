@@ -4,7 +4,7 @@
 #include <strsafe.h> /* for StringC... functions */
 
 #if !defined(NDEBUG) && defined(_MSC_VER)
-  // Detect memory leaks (MSVC only)
+  /* Detect memory leaks (MSVC only) */
   #define _CRTDBG_MAP_ALLOC
   #include <crtdbg.h>
 #endif
